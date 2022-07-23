@@ -3,7 +3,6 @@ module TestVault::EscrowTests {
     use std::signer;
     use std::unit_test;
     use std::vector;
-    use aptos_framework::managed_coin;
 
     use TestVault::Escrow;
 
@@ -15,16 +14,6 @@ module TestVault::EscrowTests {
     public entry fun init_deposit_withdraw_escrow() {
         let admin = get_account();
         let addr = signer::address_of(&admin);
-
-        // managed_coin::initialize<Escrow::ManagedCoin>(
-        //     &admin, 
-        //     b"Moon Coin",
-        //     b"MOON",
-        //     6,
-        //     false,
-        // );
-
-        managed_coin::register<Escrow::ManagedCoin>(&admin);
 
         if (!Escrow::is_initialized_valut(addr)) {
             Escrow::init_escrow(&admin);
