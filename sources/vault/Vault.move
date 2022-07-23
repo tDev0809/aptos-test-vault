@@ -102,7 +102,7 @@ module TestVault::Escrow {
         Coin::deposit<VaultCoin>(addr, coins);
     } 
 
-    public entry fun get_vault_status(escrow_account: address) acquires Escrow {
+    public entry fun get_vault_status(escrow_account: address): bool acquires Escrow {
         assert!(exists<Escrow>(escrow_account), INVALIED_ESCROW_ADDRESS);
         *&borrow_global<Escrow>(escrow_account).paused
     }

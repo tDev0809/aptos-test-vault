@@ -3,7 +3,6 @@ module TestVault::EscrowTests {
     use std::signer;
     use std::unit_test;
     use std::vector;
-    use std::string;
 
     use TestVault::Escrow;
 
