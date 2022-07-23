@@ -28,7 +28,7 @@ module TestVault::Escrow {
         to_amount: string::String,
     }
 
-    public(script) fun init_escrow(admin: &signer) {
+    public entry fun init_escrow(admin: &signer) {
         let addr = signer::address_of(admin);
         assert!(Coin::is_account_registered<VaultCoin>(addr), ECOIN_NOT_REGISTERED);
         assert!(!exists<Escrow>(addr), EVAULT_ALREADY_MOVED);
@@ -39,7 +39,7 @@ module TestVault::Escrow {
         });
     }
 
-    public(script) fun pause_escrow(admin: &signer) acquires Escrow {
+    public entry fun pause_escrow(admin: &signer) acquires Escrow {
         let addr = signer::address_of(admin);
         assert!(exists<Escrow>(addr), INVALIED_ADMIN);
 
@@ -48,7 +48,7 @@ module TestVault::Escrow {
     }
 
     
-    public(script) fun pause_escrow(admin: &signer) acquires Escrow {
+    public entry fun pause_escrow(admin: &signer) acquires Escrow {
         let addr = signer::address_of(admin);
         assert!(exists<Escrow>(addr), INVALIED_ADMIN);
 
@@ -56,7 +56,7 @@ module TestVault::Escrow {
         old_escrow.paused = false;
     }
 
-    public(script) fun deposit(user: &signer, amount: u64, escrow_account: address) acquires Escrow {
+    public entry fun deposit(user: &signer, amount: u64, escrow_account: address) acquires Escrow {
         assert!(!*&borrow_global<Escrow>(escrow_account).paused, ESCROW_PAUSED);
 
         let addr = signer::address_of(user);
@@ -83,7 +83,7 @@ module TestVault::Escrow {
         Coin::merge<VaultCoin>(&mut escrow.vault, coin);
     }
 
-    public(script) fun withdraw(user: &signer, amount: u64, escrow_account: address) acquires Escrow {
+    public entry fun withdraw(user: &signer, amount: u64, escrow_account: address) acquires Escrow {
         assert!(!*&borrow_global<Escrow>(escrow_account).paused, ESCROW_PAUSED);
 
         let addr = signer::address_of(user);
