@@ -64,10 +64,7 @@ module TestVault::Escrow {
         if (!exists<UserInfo>(addr)) {
             move_to(user, UserInfo {
                 amount: (copy amount),
-                message_change_events: event::new_event_handle<MessageWithdrawDepositEvent>(MessageWithdrawDepositEvent {
-                    from_amount: 0,
-                    to_amount: copy amount,
-                }),
+                message_change_events: event::new_event_handle<MessageWithdrawDepositEvent>(copy account),
             });
         } else {
             let old_info = borrow_global_mut<UserInfo>(addr);
