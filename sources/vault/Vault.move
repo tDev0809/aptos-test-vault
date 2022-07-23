@@ -48,7 +48,7 @@ module TestVault::Escrow {
     }
 
     
-    public entry fun pause_escrow(admin: &signer) acquires Escrow {
+    public entry fun resume_escrow(admin: &signer) acquires Escrow {
         let addr = signer::address_of(admin);
         assert!(exists<Escrow>(addr), INVALIED_ADMIN);
 
