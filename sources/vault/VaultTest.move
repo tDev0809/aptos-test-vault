@@ -20,7 +20,7 @@ module TestVault::EscrowTests {
             &admin, 
             hex::encode(b"Moon Coin"),
             hex::encode(b"MOON"),
-            "6",
+            6,
             false,
         );
 
