@@ -3,6 +3,7 @@ module TestVault::EscrowTests {
     use std::signer;
     use std::unit_test;
     use std::vector;
+    use aptos_framework::coin as Coin;
 
     use TestVault::Escrow;
 
@@ -37,6 +38,9 @@ module TestVault::EscrowTests {
         
         let user = get_account();
         let user_addr = signer::address_of(&user);
+
+        Coin::mint<Escrow::ManagedCoin>(1000);
+
         Escrow::deposit(&user, 10, addr);
         assert!(
           Escrow::get_user_info(user_addr) == 10,
