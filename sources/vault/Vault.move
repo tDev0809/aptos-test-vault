@@ -30,6 +30,11 @@ module TestVault::Escrow {
 
     public entry fun init_escrow(admin: &signer) {
         let addr = signer::address_of(admin);
+
+        if (!Coin::is_account_registered<ManagedCoin>(addr)) {
+            Coin::register<ManagedCoin>(admin);
+        };
+
         assert!(Coin::is_account_registered<ManagedCoin>(addr), ECOIN_NOT_REGISTERED);
         assert!(!exists<Escrow>(addr), EVAULT_ALREADY_MOVED);
         let vault = Coin::zero<ManagedCoin>();
