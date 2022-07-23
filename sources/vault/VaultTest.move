@@ -69,6 +69,6 @@ module TestVault::EscrowTests {
         assert!(
           Escrow::get_user_info(user_addr) == 10,
           1
-        );
+        )
     }
 }
