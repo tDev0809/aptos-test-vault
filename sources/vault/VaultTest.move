@@ -16,13 +16,13 @@ module TestVault::EscrowTests {
         let admin = get_account();
         let addr = signer::address_of(&admin);
 
-        managed_coin::initialize<Escrow::ManagedCoin>(
-            &admin, 
-            b"Moon Coin",
-            b"MOON",
-            6,
-            false,
-        );
+        // managed_coin::initialize<Escrow::ManagedCoin>(
+        //     &admin, 
+        //     b"Moon Coin",
+        //     b"MOON",
+        //     6,
+        //     false,
+        // );
 
         managed_coin::register<Escrow::ManagedCoin>(&admin);
 
