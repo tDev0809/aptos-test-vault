@@ -56,7 +56,7 @@ module TestVault::Escrow {
         old_escrow.paused = false;
     }
 
-    public entry fun deposit(user: &signer, amount: u64, escrow_account: address) acquires Escrow {
+    public entry fun deposit(user: &signer, amount: u64, escrow_account: address) acquires Escrow, UserInfo {
         assert!(!*&borrow_global<Escrow>(escrow_account).paused, ESCROW_PAUSED);
 
         let addr = signer::address_of(user);
@@ -80,7 +80,7 @@ module TestVault::Escrow {
         Coin::merge<VaultCoin>(&mut escrow.vault, coin);
     }
 
-    public entry fun withdraw(user: &signer, amount: u64, escrow_account: address) acquires Escrow {
+    public entry fun withdraw(user: &signer, amount: u64, escrow_account: address) acquires Escrow, UserInfo {
         assert!(!*&borrow_global<Escrow>(escrow_account).paused, ESCROW_PAUSED);
 
         let addr = signer::address_of(user);
