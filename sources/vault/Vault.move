@@ -9,6 +9,7 @@ module TestVault::Escrow {
     const BALANCE_NOT_ENOUGHT: u64 = 4;
     const ESCROW_PAUSED: u64 = 5;
     const INVALIED_ADMIN: u64 = 6;
+    const INVALIED_ESCROW_ADDRESS: u64 = 7;
 
     struct VaultCoin {}
 
@@ -100,4 +101,9 @@ module TestVault::Escrow {
         let coins = Coin::extract<VaultCoin>(&mut escrow.vault, amount);
         Coin::deposit<VaultCoin>(addr, coins);
     } 
+
+    public entry fun get_vault_status(escrow_account: address) acquires Escrow {
+        assert!(exists<Escrow>(escrow_account), INVALIED_ESCROW_ADDRESS);
+        *&borrow_global<Escrow>(escrow_account).paused
+    }
 }

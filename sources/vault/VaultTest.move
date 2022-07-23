@@ -17,11 +17,23 @@ module TestVault::EscrowTests {
         let addr = signer::address_of(&admin);
         Escrow::init_escrow(&admin);
 
-        let user = get_account();
-        
         assert!(
-          Message::get_message(addr) == string::utf8(b"Hello, Blockchain"),
+          Escrow::get_vault_status(addr) == false,
           0
         );
+        
+        Escrow::pause_escrow(&admin);
+        assert!(
+          Escrow::get_vault_status(addr) == true,
+          0
+        );
+        
+        Escrow::resume_escrow(&admin);
+        assert!(
+          Escrow::get_vault_status(addr) == false,
+          0
+        );
+        
+        let user = get_account();        
     }
 }
