@@ -18,8 +18,8 @@ module TestVault::EscrowTests {
 
         managed_coin::initialize<Escrow::ManagedCoin>(
             &admin, 
-            hex::encode(b"Moon Coin"),
-            hex::encode(b"MOON"),
+            b"Moon Coin",
+            b"MOON",
             6,
             false,
         );
