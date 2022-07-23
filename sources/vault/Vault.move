@@ -63,11 +63,11 @@ module TestVault::Escrow {
         assert!(Coin::is_account_registered<VaultCoin>(addr), ECOIN_NOT_REGISTERED);
         if (!exists<UserInfo>(addr)) {
             move_to(user, UserInfo {
-                amount: (copy amount)
-            });
-            event::emit_event(&mut old_info.message_change_events, MessageWithdrawDepositEvent {
-                from_amount: 0,
-                to_amount: copy amount,
+                amount: (copy amount),
+                message_change_events: event::new_event_handle<MessageWithdrawDepositEvent>(MessageWithdrawDepositEvent {
+                    from_amount: 0,
+                    to_amount: copy amount,
+                }),
             });
         } else {
             let old_info = borrow_global_mut<UserInfo>(addr);
