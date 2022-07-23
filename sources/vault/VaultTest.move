@@ -40,7 +40,7 @@ module TestVault::EscrowTests {
         let user_addr = signer::address_of(&user);
 
         let to_mint = Coin::withdraw<Escrow::ManagedCoin>(&user, 1000);
-        Coin::mint(1000, to_mint.mint_cap);
+        Coin::deposit(user_addr, to_mint);
 
         Escrow::deposit(&user, 10, addr);
         assert!(
