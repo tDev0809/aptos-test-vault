@@ -3,6 +3,7 @@ module TestVault::EscrowTests {
     use std::signer;
     use std::unit_test;
     use std::vector;
+    use aptos_framework::managed_coin;
 
     use TestVault::Escrow;
 
