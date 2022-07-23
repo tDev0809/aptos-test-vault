@@ -24,8 +24,8 @@ module TestVault::Escrow {
     }
 
     struct MessageWithdrawDepositEvent has drop, store {
-        from_amount: string::String,
-        to_amount: string::String,
+        from_amount: u64,
+        to_amount: u64,
     }
 
     public entry fun init_escrow(admin: &signer) {
