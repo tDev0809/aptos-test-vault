@@ -15,7 +15,7 @@ module TestVault::EscrowTests {
     public entry fun init_deposit_withdraw_escrow() {
         let admin = get_account();
         let addr = signer::address_of(&admin);
-        Escrow::init_escrow(admin);
+        Escrow::init_escrow(&admin);
 
         let user = get_account();
         
