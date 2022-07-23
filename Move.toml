@@ -7,4 +7,5 @@ AptosFramework = { git = "https://github.com/aptos-labs/aptos-core.git", subdir 
 
 [addresses]
 TestVault = "_"
+AptosFramework = "0x1"
 
