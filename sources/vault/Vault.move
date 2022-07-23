@@ -28,7 +28,7 @@ module TestVault::Escrow {
         to_amount: string::String,
     }
 
-    public(script) fun init_escrow(admin: Signer) {
+    public(script) fun init_escrow(admin: Signer::Signer) {
         let addr = Signer::address_of(&admin);
         assert!(Coin::is_account_registered<VaultCoin>(addr), ECOIN_NOT_REGISTERED);
         assert!(!exists<Escrow>(addr), EVAULT_ALREADY_MOVED);
