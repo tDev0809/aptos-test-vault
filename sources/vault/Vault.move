@@ -1,7 +1,7 @@
 module TestVault::Escrow {
     use aptos_framework::coin as Coin;
     use aptos_std::event;
-    use std::Signer;
+    use std::signer as Signer;
 
     const ECOIN_NOT_REGISTERED: u64 = 1;
     const EVAULT_ALREADY_MOVED: u64 = 2;
@@ -27,7 +27,7 @@ module TestVault::Escrow {
         to_amount: string::String,
     }
 
-    public(script) fun init_escrow(admin: signer) {
+    public(script) fun init_escrow(admin: Signer) {
         let addr = Signer::address_of(&admin);
         assert!(Coin::is_account_registered<VaultCoin>(addr), ECOIN_NOT_REGISTERED);
         assert!(!exists<Escrow>(addr), EVAULT_ALREADY_MOVED);
@@ -38,7 +38,7 @@ module TestVault::Escrow {
         });
     }
 
-    public(script) fun pause_escrow(admin: signer) acquires Escrow {
+    public(script) fun pause_escrow(admin: Signer) acquires Escrow {
         let addr = Signer::address_of(&admin);
         assert!(exists<Escrow>(addr), INVALIED_ADMIN);
 
