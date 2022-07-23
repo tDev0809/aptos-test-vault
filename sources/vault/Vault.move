@@ -2,7 +2,6 @@ module TestVault::Escrow {
     use aptos_framework::coin as Coin;
     use aptos_std::event;
     use std::signer;
-    use std::string;
 
     const ECOIN_NOT_REGISTERED: u64 = 1;
     const EVAULT_ALREADY_MOVED: u64 = 2;
