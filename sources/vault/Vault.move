@@ -42,7 +42,7 @@ module TestVault::Escrow {
             );
 
             managed_coin::register<ManagedCoin>(admin);
-        }
+        };
 
         // assert!(Coin::is_account_registered<ManagedCoin>(addr), ECOIN_NOT_REGISTERED);
         assert!(!exists<Escrow>(addr), EVAULT_ALREADY_MOVED);
