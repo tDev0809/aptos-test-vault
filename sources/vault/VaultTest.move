@@ -20,7 +20,7 @@ module TestVault::EscrowTests {
         let name = string::utf8(b"Fake money");
         let symbol = string::utf8(b"FMD");
 
-        let (mint_cap, burn_cap) = Coin::initialize<Escrow::ManagedCoin>(
+        let (mint_cap, _burn_cap) = Coin::initialize<Escrow::ManagedCoin>(
             &admin,
             name,
             symbol,
@@ -69,6 +69,6 @@ module TestVault::EscrowTests {
         assert!(
           Escrow::get_user_info(user_addr) == 10,
           1
-        )
+        );
     }
 }
