@@ -112,6 +112,6 @@ module TestVault::Escrow {
             return 0;
         };
 
-        return *&borrow_global<UserInfo>(user_account).amount;
+        *&borrow_global<UserInfo>(user_account).amount
     }
 }
