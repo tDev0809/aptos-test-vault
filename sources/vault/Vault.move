@@ -1,5 +1,5 @@
 module TestVault::Escrow {
-    use AptosFramework::Coin;
+    use aptos_framework::coin as Coin;
     use std::error;
     use aptos_std::event;
     use Std::Signer;
