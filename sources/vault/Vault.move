@@ -107,11 +107,11 @@ module TestVault::Escrow {
         *&borrow_global<Escrow>(escrow_account).paused
     }
 
-    public entry fun get_user_info(user_account: address): u64 acquires Escrow, UserInfo {
+    public entry fun get_user_info(user_account: address): u64 acquires UserInfo {
         if (!exists<UserInfo>(user_account)) {
             return 0;
         }
 
-        *&borrow_global<UserInfo>(user_account).amount
+        return *&borrow_global<UserInfo>(user_account).amount;
     }
 }
