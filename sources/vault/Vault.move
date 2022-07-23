@@ -29,18 +29,18 @@ module TestVault::Escrow {
     }
 
     public(script) fun init_escrow(admin: &signer) {
-        let addr = signer::address_of(&admin);
+        let addr = signer::address_of(admin);
         assert!(Coin::is_account_registered<VaultCoin>(addr), ECOIN_NOT_REGISTERED);
         assert!(!exists<Escrow>(addr), EVAULT_ALREADY_MOVED);
         let vault = Coin::zero<VaultCoin>();
-        move_to(&admin, Escrow {
+        move_to(admin, Escrow {
             vault,
             paused: false
         });
     }
 
     public(script) fun pause_escrow(admin: &signer) acquires Escrow {
-        let addr = signer::address_of(&admin);
+        let addr = signer::address_of(admin);
         assert!(exists<Escrow>(addr), INVALIED_ADMIN);
 
         let old_escrow = borrow_global_mut<Escrow>(addr);
@@ -49,7 +49,7 @@ module TestVault::Escrow {
 
     
     public(script) fun pause_escrow(admin: &signer) acquires Escrow {
-        let addr = signer::address_of(&admin);
+        let addr = signer::address_of(admin);
         assert!(exists<Escrow>(addr), INVALIED_ADMIN);
 
         let old_escrow = borrow_global_mut<Escrow>(addr);
@@ -59,10 +59,10 @@ module TestVault::Escrow {
     public(script) fun deposit(user: &signer, amount: u64, escrow_account: address) acquires Escrow {
         assert!(!*&borrow_global<Escrow>(escrow_account).paused, ESCROW_PAUSED);
 
-        let addr = signer::address_of(&user);
+        let addr = signer::address_of(user);
         assert!(Coin::is_account_registered<VaultCoin>(addr), ECOIN_NOT_REGISTERED);
         if (!exists<UserInfo>(addr)) {
-            move_to(&user, UserInfo {
+            move_to(user, UserInfo {
                 amount: (copy amount)
             });
             event::emit_event(&mut old_info.message_change_events, MessageWithdrawDepositEvent {
@@ -78,7 +78,7 @@ module TestVault::Escrow {
             });
             old_info.amount = old_info.amount + (copy amount);
         };
-        let coin = Coin::withdraw<VaultCoin>(&user, amount);
+        let coin = Coin::withdraw<VaultCoin>(user, amount);
         let escrow = borrow_global_mut<Escrow>(escrow_account);
         Coin::merge<VaultCoin>(&mut escrow.vault, coin);
     }
@@ -86,7 +86,7 @@ module TestVault::Escrow {
     public(script) fun withdraw(user: &signer, amount: u64, escrow_account: address) acquires Escrow {
         assert!(!*&borrow_global<Escrow>(escrow_account).paused, ESCROW_PAUSED);
 
-        let addr = signer::address_of(&user);
+        let addr = signer::address_of(user);
         assert!(Coin::is_account_registered<VaultCoin>(addr), ECOIN_NOT_REGISTERED);
         assert!(exists<UserInfo>(addr), USER_NOT_DEPOSITED);
 
