@@ -110,7 +110,7 @@ module TestVault::Escrow {
     public entry fun get_user_info(user_account: address): u64 acquires UserInfo {
         if (!exists<UserInfo>(user_account)) {
             return 0;
-        }
+        };
 
         return *&borrow_global<UserInfo>(user_account).amount;
     }
