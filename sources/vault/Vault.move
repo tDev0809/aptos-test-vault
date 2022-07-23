@@ -106,4 +106,12 @@ module TestVault::Escrow {
         assert!(exists<Escrow>(escrow_account), INVALIED_ESCROW_ADDRESS);
         *&borrow_global<Escrow>(escrow_account).paused
     }
+
+    public entry fun get_user_info(user_account: address): u64 acquires Escrow, UserInfo {
+        if (!exists<UserInfo>(user_account)) {
+            return 0;
+        }
+
+        *&borrow_global<UserInfo>(user_account).amount
+    }
 }

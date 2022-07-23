@@ -33,6 +33,12 @@ module TestVault::EscrowTests {
           0
         );
         
-        let user = get_account();        
+        let user = get_account();
+        let user_addr = signer::address_of(&user);
+        Escrow::deposit(&user, 10 as u64, addr);
+        assert!(
+          Escrow::get_user_info(user_addr) == 10 as u64,
+          1
+        );
     }
 }
