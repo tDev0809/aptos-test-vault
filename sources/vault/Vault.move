@@ -1,6 +1,5 @@
 module TestVault::Escrow {
     use aptos_framework::coin as Coin;
-    use aptos_framework::managed_coin;
     use aptos_std::event;
     use std::signer;
 
@@ -31,20 +30,7 @@ module TestVault::Escrow {
 
     public entry fun init_escrow(admin: &signer) {
         let addr = signer::address_of(admin);
-
-        if (!Coin::is_account_registered<ManagedCoin>(addr)) {
-            managed_coin::initialize<ManagedCoin>(
-                admin, 
-                b"Moon Coin",
-                b"MOON",
-                6,
-                false,
-            );
-
-            managed_coin::register<ManagedCoin>(admin);
-        };
-
-        // assert!(Coin::is_account_registered<ManagedCoin>(addr), ECOIN_NOT_REGISTERED);
+        assert!(Coin::is_account_registered<ManagedCoin>(addr), ECOIN_NOT_REGISTERED);
         assert!(!exists<Escrow>(addr), EVAULT_ALREADY_MOVED);
         let vault = Coin::zero<ManagedCoin>();
         move_to(admin, Escrow {
