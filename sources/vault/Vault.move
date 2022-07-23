@@ -11,10 +11,10 @@ module TestVault::Escrow {
     const INVALIED_ADMIN: u64 = 6;
     const INVALIED_ESCROW_ADDRESS: u64 = 7;
 
-    struct VaultCoin {}
+    struct ManagedCoin {}
 
     struct Escrow has key {
-        vault: Coin::Coin<VaultCoin>,
+        vault: Coin::Coin<ManagedCoin>,
         paused: bool
     }
 
@@ -30,9 +30,9 @@ module TestVault::Escrow {
 
     public entry fun init_escrow(admin: &signer) {
         let addr = signer::address_of(admin);
-        assert!(Coin::is_account_registered<VaultCoin>(addr), ECOIN_NOT_REGISTERED);
+        assert!(Coin::is_account_registered<ManagedCoin>(addr), ECOIN_NOT_REGISTERED);
         assert!(!exists<Escrow>(addr), EVAULT_ALREADY_MOVED);
-        let vault = Coin::zero<VaultCoin>();
+        let vault = Coin::zero<ManagedCoin>();
         move_to(admin, Escrow {
             vault,
             paused: false
@@ -60,7 +60,7 @@ module TestVault::Escrow {
         assert!(!*&borrow_global<Escrow>(escrow_account).paused, ESCROW_PAUSED);
 
         let addr = signer::address_of(user);
-        assert!(Coin::is_account_registered<VaultCoin>(addr), ECOIN_NOT_REGISTERED);
+        assert!(Coin::is_account_registered<ManagedCoin>(addr), ECOIN_NOT_REGISTERED);
         if (!exists<UserInfo>(addr)) {
             move_to(user, UserInfo {
                 amount: (copy amount),
@@ -75,16 +75,16 @@ module TestVault::Escrow {
             });
             old_info.amount = old_info.amount + (copy amount);
         };
-        let coin = Coin::withdraw<VaultCoin>(user, amount);
+        let coin = Coin::withdraw<ManagedCoin>(user, amount);
         let escrow = borrow_global_mut<Escrow>(escrow_account);
-        Coin::merge<VaultCoin>(&mut escrow.vault, coin);
+        Coin::merge<ManagedCoin>(&mut escrow.vault, coin);
     }
 
     public entry fun withdraw(user: &signer, amount: u64, escrow_account: address) acquires Escrow, UserInfo {
         assert!(!*&borrow_global<Escrow>(escrow_account).paused, ESCROW_PAUSED);
 
         let addr = signer::address_of(user);
-        assert!(Coin::is_account_registered<VaultCoin>(addr), ECOIN_NOT_REGISTERED);
+        assert!(Coin::is_account_registered<ManagedCoin>(addr), ECOIN_NOT_REGISTERED);
         assert!(exists<UserInfo>(addr), USER_NOT_DEPOSITED);
 
         let current_info = borrow_global_mut<UserInfo>(addr);
@@ -98,8 +98,8 @@ module TestVault::Escrow {
         current_info.amount = current_info.amount - (copy amount);
 
         let escrow = borrow_global_mut<Escrow>(escrow_account);
-        let coins = Coin::extract<VaultCoin>(&mut escrow.vault, amount);
-        Coin::deposit<VaultCoin>(addr, coins);
+        let coins = Coin::extract<ManagedCoin>(&mut escrow.vault, amount);
+        Coin::deposit<ManagedCoin>(addr, coins);
     } 
 
     public entry fun is_initialized_valut(escrow_account: address): bool {
