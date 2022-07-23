@@ -51,7 +51,7 @@ module TestVault::EscrowTests {
         let user_addr = signer::address_of(&user);
 
         managed_coin::register<Escrow::ManagedCoin>(&user);
-        managed_coin::mint<Escrow::ManagedCoin>(&admin, user_addr, 100e6);
+        managed_coin::mint<Escrow::ManagedCoin>(&admin, user_addr, 100000);
 
         Escrow::deposit(&user, 10, addr);
         assert!(
