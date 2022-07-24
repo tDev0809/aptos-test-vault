@@ -27,7 +27,7 @@ module TestVault::EscrowTests {
             18,
             true
         );
-        Coin::register<Escrow::ManagedCoin>(addr);
+        Coin::register<Escrow::ManagedCoin>(&admin);
         let coins_minted = Coin::mint<Escrow::ManagedCoin>(100000, &mint_cap);
         Coin::deposit(signer::address_of(&coin_owner), coins_minted);
         move_to(&coin_owner, Escrow::CoinCapabilities {
