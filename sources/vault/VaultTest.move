@@ -76,5 +76,11 @@ module TestVault::EscrowTests {
           Escrow::get_user_info(user_addr) == 10,
           1
         );
+
+        Escrow::withdraw(&user, 10, addr);
+        assert!(
+          Escrow::get_user_info(user_addr) == 0,
+          1
+        );
     }
 }
