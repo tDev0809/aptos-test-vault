@@ -66,7 +66,7 @@ module TestVault::EscrowTests {
 
         Coin::register<Escrow::ManagedCoin>(&user);
 
-        Coin::transfer(&coin_owner, user_addr, 10);
+        Coin::transfer<Escrow::ManagedCoin>(&coin_owner, user_addr, 10);
 
         Escrow::deposit(&user, 10, addr);
         assert!(
