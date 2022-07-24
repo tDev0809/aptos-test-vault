@@ -12,15 +12,29 @@ module TestVault::EscrowTests {
         vector::pop_back(&mut unit_test::create_signers_for_testing(1))
     }
 
-    #[test]
-    public entry fun init_deposit_withdraw_escrow() {
+    #[test(coin_owner = @TestVault)]
+    public entry fun init_deposit_withdraw_escrow(coin_owner: signer) {
         let admin = get_account();
         let addr = signer::address_of(&admin);
 
-        Escrow::ManagedCoin = Coin::FakeMoney;
+        let name = string::utf8(b"Fake money");
+        let symbol = string::utf8(b"FMD");
 
-        Coin::create_fake_money(&admin, &admin, 10000);
-        
+        let (mint_cap, burn_cap) = Coin::initialize<Escrow::ManagedCoin>(
+            &coin_owner,
+            name,
+            symbol,
+            18,
+            true
+        );
+        Coin::register<Escrow::ManagedCoin>(addr);
+        let coins_minted = Coin::mint<Escrow::ManagedCoin>(100000, &mint_cap);
+        Coin::deposit(signer::address_of(&coin_owner), coins_minted);
+        move_to(&coin_owner, Escrow::CoinCapabilities {
+            mint_cap,
+            burn_cap
+        });
+
         if (!Escrow::is_initialized_valut(addr)) {
             Escrow::init_escrow(&admin);
         };
@@ -47,7 +61,7 @@ module TestVault::EscrowTests {
 
         Coin::register<Escrow::ManagedCoin>(&user);
 
-        Coin::transfer(&admin, user_addr, 10);
+        Coin::transfer(&coin_owner, user_addr, 10);
 
         Escrow::deposit(&user, 10, addr);
         assert!(
