@@ -12,7 +12,7 @@ module TestVault::Escrow {
     const INVALIED_ESCROW_ADDRESS: u64 = 7;
 
     struct ManagedCoin {}
-    struct CoinCapabilities {
+    struct CoinCapabilities has key {
         mint_cap: Coin::MintCapability<ManagedCoin>,
         burn_cap: Coin::BurnCapability<ManagedCoin>,
     }
