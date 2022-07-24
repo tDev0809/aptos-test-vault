@@ -12,9 +12,15 @@ module TestVault::EscrowTests {
         vector::pop_back(&mut unit_test::create_signers_for_testing(1))
     }
 
+    /// Capability required to mint coins.
+    struct MintCapability<phantom CoinType> has copy, key, store { }
+
+    /// Capability required to burn coins.
+    struct BurnCapability<phantom CoinType> has copy, key, store { }
+
     struct CoinCapabilities has key {
-        mint_cap: MintCapability<FakeMoney>,
-        burn_cap: BurnCapability<FakeMoney>,
+        mint_cap: MintCapability<Escrow::ManagedCoin>,
+        burn_cap: BurnCapability<Escrow::ManagedCoin>,
     }
 
     #[test]
