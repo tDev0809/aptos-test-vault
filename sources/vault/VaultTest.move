@@ -12,36 +12,15 @@ module TestVault::EscrowTests {
         vector::pop_back(&mut unit_test::create_signers_for_testing(1))
     }
 
-    struct CoinCapabilities has key {
-        mint_cap: Coin::MintCapability<Escrow::ManagedCoin>,
-        burn_cap: Coin::BurnCapability<Escrow::ManagedCoin>,
-    }
-
     #[test]
     public entry fun init_deposit_withdraw_escrow() {
         let admin = get_account();
         let addr = signer::address_of(&admin);
 
-        let name = string::utf8(b"Fake money");
-        let symbol = string::utf8(b"FMD");
+        Escrow::ManagedCoin = Coin::FakeMoney;
 
-        let (mint_cap, burn_cap) = Coin::initialize<Escrow::ManagedCoin>(
-            &admin,
-            name,
-            symbol,
-            18,
-            true
-        );
-        Coin::register<Escrow::ManagedCoin>(&admin);
-
-        let coins_minted = Coin::mint<Escrow::ManagedCoin>(1000, &mint_cap);
-        Coin::deposit(addr, coins_minted);
-
-        move_to(&admin, CoinCapabilities {
-            mint_cap,
-            burn_cap
-        });
-
+        Coin::create_fake_money(&admin, &admin, 10000);
+        
         if (!Escrow::is_initialized_valut(addr)) {
             Escrow::init_escrow(&admin);
         };
@@ -68,16 +47,7 @@ module TestVault::EscrowTests {
 
         Coin::register<Escrow::ManagedCoin>(&user);
 
-        let coins_minted = Coin::mint<Escrow::ManagedCoin>(1000, &mint_cap);
-        Coin::deposit(user_addr, coins_minted);
-
-        move_to(&user, CoinCapabilities {
-            mint_cap,
-            burn_cap
-        });
-
-        // let to_mint = Coin::withdraw<Escrow::ManagedCoin>(&admin, 1000);
-        // Coin::deposit(user_addr, to_mint);
+        Coin::transfer(&admin, user_addr, 10);
 
         Escrow::deposit(&user, 10, addr);
         assert!(
