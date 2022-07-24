@@ -7,6 +7,11 @@ module TestVault::EscrowTests {
     use aptos_framework::coin as Coin;
 
     use TestVault::Escrow;
+    
+    struct CoinCapabilities has key {
+        mint_cap: Coin::MintCapability<Escrow::ManagedCoin>,
+        burn_cap: Coin::BurnCapability<Escrow::ManagedCoin>,
+    }
 
     fun get_account(): signer {
         vector::pop_back(&mut unit_test::create_signers_for_testing(1))
