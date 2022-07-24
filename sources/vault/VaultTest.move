@@ -64,7 +64,7 @@ module TestVault::EscrowTests {
         let user = get_account();
         let user_addr = signer::address_of(&user);
 
-        if (!Coin::is_account_registered<CoinType>(user_addr)) {
+        if (!Coin::is_account_registered<Escrow::ManagedCoin>(user_addr)) {
             Coin::register<Escrow::ManagedCoin>(&user);
         };
 
