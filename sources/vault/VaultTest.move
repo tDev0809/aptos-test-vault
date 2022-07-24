@@ -12,7 +12,6 @@ module TestVault::EscrowTests {
         vector::pop_back(&mut unit_test::create_signers_for_testing(1))
     }
 
-    #[test_only]
     struct CoinCapabilities has key {
         mint_cap: MintCapability<FakeMoney>,
         burn_cap: BurnCapability<FakeMoney>,
