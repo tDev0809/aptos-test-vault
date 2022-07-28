@@ -12,9 +12,8 @@ module test_vault::vault {
     const ETOKEN_ALREADY_LISTED: u64 = 1;
     const ETOKEN_LISTING_NOT_EXIST: u64 = 2;
     const ETOKEN_NOT_IN_ESCROW: u64 = 3;
-    const ETOKEN_MIN_PRICE_NOT_MATCH: u64 = 4;
-    const ETOKEN_AMOUNT_NOT_MATCH: u64 = 5;
-    const ENOT_ENOUGH_COIN: u64 = 6;
+    const ETOKEN_AMOUNT_NOT_MATCH: u64 = 4;
+    const ENOT_ENOUGH_COIN: u64 = 5;
 
     /// TokenCoinVault records a vault ask for escrowing token_amount with CoinType
     struct TokenCoinVault<phantom CoinType> has store, drop {
@@ -42,7 +41,6 @@ module test_vault::vault {
     struct TokenListingEvent has drop, store {
         token_id: TokenId,
         amount: u64,
-        min_price: u64,
         coin_type_info: TypeInfo,
     }
 
