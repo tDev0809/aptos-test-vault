@@ -170,7 +170,7 @@ module test_vault::vault {
 
         list_token_for_vault<coin::FakeMoney>(&token_owner, token_id, 100);
         // coin owner only has 50 coins left
-        assert!(coin::balance<coin::FakeMoney>(signer::address_of(&coin_owner)) == 50, 1);
+        assert!(coin::balance<coin::FakeMoney>(signer::address_of(&coin_owner)) == 100, 1);
         // all tokens in token escrow or transferred. Token owner has 0 token in token_store
         assert!(token::balance_of(signer::address_of(&token_owner), token_id) == 0, 1);
 
