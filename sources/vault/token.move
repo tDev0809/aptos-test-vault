@@ -8,7 +8,7 @@ module test_vault::token {
     use std::acl::{Self, ACL};
 
     use aptos_std::table::{Self, Table};
-    use aptos_token::property_map::{Self, PropertyMap};
+    use test_vault::property_map::{Self, PropertyMap};
 
     const TOKEN_MAX_MUTABLE_IND: u64 = 0;
     const TOKEN_URI_MUTABLE_IND: u64 = 1;

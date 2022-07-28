@@ -8,7 +8,7 @@ module test_vault::vault {
     use aptos_framework::coin;
     use aptos_framework::timestamp;
     use aptos_std::type_info::{Self, TypeInfo};
-    use aptos_token::token_v1::{Self, Token, TokenId, deposit_token, withdraw_token, merge, split};
+    use test_vault::token_v1::{Self, Token, TokenId, deposit_token, withdraw_token, merge, split};
 
     const ETOKEN_ALREADY_LISTED: u64 = 1;
     const ETOKEN_LISTING_NOT_EXIST: u64 = 2;
@@ -173,7 +173,7 @@ module test_vault::vault {
         token_v1::initialize_token_store(&coin_owner);
         coin::create_fake_money(&coin_owner, &token_owner, 100);
 
-        list_token_for_vault<coin::FakeMoney>(&token_owner, token_id, 100, 1, 0);
+        list_token_for_vault<coin::FakeMoney>(&token_owner, token_id, 100);
         // coin owner only has 50 coins left
         assert!(coin::balance<coin::FakeMoney>(signer::address_of(&coin_owner)) == 50, 1);
         // all tokens in token escrow or transferred. Token owner has 0 token in token_store
