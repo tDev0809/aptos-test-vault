@@ -2,8 +2,6 @@
 module test_vault::test_vault {
     #[test(token_owner = @0xAB, coin_owner = @0x1, aptos_framework = @aptos_framework)]
     public entry fun test_escrow_coin_for_token(token_owner: signer, coin_owner: signer, aptos_framework: signer) acquires TokenStoreEscrow, TokenListings {
-        timestamp::set_time_has_started_for_testing(&aptos_framework);
-        timestamp::update_global_time_for_test(10000000);
         let token_id = token::create_collection_and_token(&token_owner, 100, 100, 100);
         token::initialize_token_store(&coin_owner);
         coin::create_fake_money(&coin_owner, &token_owner, 100);

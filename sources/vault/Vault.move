@@ -6,7 +6,6 @@ module test_vault::vault {
     use std::signer;
     use aptos_std::table::{Self, Table};
     use aptos_framework::coin;
-    use aptos_framework::timestamp;
     use aptos_std::type_info::{Self, TypeInfo};
     use test_vault::token::{Self, Token, TokenId, deposit_token, withdraw_token, merge, split};
 
