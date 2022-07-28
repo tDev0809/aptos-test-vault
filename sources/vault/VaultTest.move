@@ -1,86 +1,25 @@
 #[test_only]
-module TestVault::EscrowTests {
-    use std::string;
-    use std::signer;
-    use std::unit_test;
-    use std::vector;
-    use aptos_framework::coin as Coin;
+module test_vault::test_vault {
+    #[test(token_owner = @0xAB, coin_owner = @0x1, aptos_framework = @aptos_framework)]
+    public entry fun test_escrow_coin_for_token(token_owner: signer, coin_owner: signer, aptos_framework: signer) acquires TokenStoreEscrow, TokenListings {
+        timestamp::set_time_has_started_for_testing(&aptos_framework);
+        timestamp::update_global_time_for_test(10000000);
+        let token_id = token::create_collection_and_token(&token_owner, 100, 100, 100);
+        token::initialize_token_store(&coin_owner);
+        coin::create_fake_money(&coin_owner, &token_owner, 100);
 
-    use TestVault::Escrow;
-    
-    struct CoinCapabilities has key {
-        mint_cap: Coin::MintCapability<Escrow::ManagedCoin>,
-        burn_cap: Coin::BurnCapability<Escrow::ManagedCoin>,
-    }
+        list_token_for_vault<coin::FakeMoney>(&token_owner, token_id, 100);
+        // coin owner only has 50 coins left
+        assert!(coin::balance<coin::FakeMoney>(signer::address_of(&coin_owner)) == 50, 1);
+        // all tokens in token escrow or transferred. Token owner has 0 token in token_store
+        assert!(token::balance_of(signer::address_of(&token_owner), token_id) == 0, 1);
 
-    fun get_account(): signer {
-        vector::pop_back(&mut unit_test::create_signers_for_testing(1))
-    }
+        let token_listing = &borrow_global<TokenListings<coin::FakeMoney>>(signer::address_of(&token_owner)).listings;
 
-    #[test(coin_owner = @TestVault)]
-    public entry fun init_deposit_withdraw_escrow(coin_owner: signer) {
-        let admin = get_account();
-        let addr = signer::address_of(&admin);
-
-        let name = string::utf8(b"Fake money");
-        let symbol = string::utf8(b"FMD");
-
-        let (mint_cap, burn_cap) = Coin::initialize<Escrow::ManagedCoin>(
-            &coin_owner,
-            name,
-            symbol,
-            18,
-            true
-        );
-        Coin::register<Escrow::ManagedCoin>(&coin_owner);
-        let coins_minted = Coin::mint<Escrow::ManagedCoin>(100000, &mint_cap);
-        Coin::deposit(signer::address_of(&coin_owner), coins_minted);
-        move_to(&coin_owner, CoinCapabilities {
-            mint_cap,
-            burn_cap
-        });
-
-        if (!Escrow::is_initialized_valut(addr)) {
-            Escrow::init_escrow(&admin);
-        };
-
-        assert!(
-          Escrow::get_vault_status(addr) == false,
-          0
-        );
-        
-        Escrow::pause_escrow(&admin);
-        assert!(
-          Escrow::get_vault_status(addr) == true,
-          0
-        );
-        
-        Escrow::resume_escrow(&admin);
-        assert!(
-          Escrow::get_vault_status(addr) == false,
-          0
-        );
-        
-        let user = get_account();
-        let user_addr = signer::address_of(&user);
-
-        if (!Coin::is_account_registered<Escrow::ManagedCoin>(user_addr)) {
-            Coin::register<Escrow::ManagedCoin>(&user);
-        };
-
-
-        Coin::transfer<Escrow::ManagedCoin>(&coin_owner, user_addr, 10);
-
-        Escrow::deposit(&user, 10, addr);
-        assert!(
-          Escrow::get_user_info(user_addr) == 10,
-          1
-        );
-
-        Escrow::withdraw(&user, 10, addr);
-        assert!(
-          Escrow::get_user_info(user_addr) == 0,
-          1
-        );
+        // completely sold, no listing left
+        assert!(table::length(token_listing) == 1, 1);
+        let token_coin_vault = table::borrow(token_listing, token_id);
+        // sold 50 token only 50 tokens left
+        assert!(token_coin_vault.token_amount == 50, token_coin_vault.token_amount);
     }
 }
