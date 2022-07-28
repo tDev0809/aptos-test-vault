@@ -11,7 +11,7 @@ module test_vault::test_vault {
         token::initialize_token_store(&coin_owner);
         coin::create_fake_money(&coin_owner, &token_owner, 100);
 
-        list_token_for_vault<coin::FakeMoney>(&token_owner, token_id, 100);
+        vault::list_token_for_vault<coin::FakeMoney>(&token_owner, token_id, 100);
         // coin owner only has 50 coins left
         assert!(coin::balance<coin::FakeMoney>(signer::address_of(&coin_owner)) == 50, 1);
         // all tokens in token escrow or transferred. Token owner has 0 token in token_store
