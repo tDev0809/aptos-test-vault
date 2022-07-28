@@ -9,5 +9,5 @@ AptosFramework = { git = "https://github.com/aptos-labs/aptos-core.git", subdir 
 std = "0x1"
 aptos_std = "0x1"
 aptos_framework = "0x1"
-TestVault = "_"
+test_vault = "_"
 
