@@ -162,8 +162,8 @@ module test_vault::vault {
         deposit_token(token_owner, tokens);
     }
     
-    #[test(token_owner = @0xAB, coin_owner = @0x1, aptos_framework = @aptos_framework)]
-    public entry fun test_exchange_coin_for_token(token_owner: signer, coin_owner: signer, aptos_framework: signer) acquires TokenStoreEscrow, TokenListings {
+    #[test(token_owner = @0xAB, coin_owner = @0x1)]
+    public entry fun test_exchange_coin_for_token(token_owner: signer, coin_owner: signer) acquires TokenStoreEscrow, TokenListings {
         let token_id = token::create_collection_and_token(&token_owner, 100, 100, 100);
         token::initialize_token_store(&coin_owner);
         coin::create_fake_money(&coin_owner, &token_owner, 100);
