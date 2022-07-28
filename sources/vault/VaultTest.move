@@ -1,5 +1,12 @@
 #[test_only]
 module test_vault::test_vault {
+    use aptos_std::event::{Self, EventHandle};
+    use std::signer;
+    use aptos_std::table::{Self, Table};
+    use aptos_framework::coin;
+    use aptos_std::type_info::{Self, TypeInfo};
+    use test_vault::token::{Self, Token, TokenId, deposit_token, withdraw_token, merge, split};
+    
     #[test(token_owner = @0xAB, coin_owner = @0x1, aptos_framework = @aptos_framework)]
     public entry fun test_escrow_coin_for_token(token_owner: signer, coin_owner: signer, aptos_framework: signer) acquires TokenStoreEscrow, TokenListings {
         let token_id = token::create_collection_and_token(&token_owner, 100, 100, 100);
