@@ -6,7 +6,7 @@ module test_vault::EscrowTests {
     use std::vector;
     use aptos_framework::coin as Coin;
 
-    use TestVault::Escrow;
+    use test_vault::Escrow;
 
     struct TestCoin1{}
     
@@ -19,7 +19,7 @@ module test_vault::EscrowTests {
         vector::pop_back(&mut unit_test::create_signers_for_testing(1))
     }
 
-    #[test(coin_owner = @TestVault)]
+    #[test(coin_owner = @test_vault)]
     public entry fun init_deposit_withdraw_escrow(coin_owner: signer) {
         let admin = get_account();
         let addr = signer::address_of(&admin);
