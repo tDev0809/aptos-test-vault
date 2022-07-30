@@ -1,5 +1,5 @@
 #[test_only]
-module TestVault::EscrowTests {
+module test_vault::EscrowTests {
     use std::string;
     use std::signer;
     use std::unit_test;
