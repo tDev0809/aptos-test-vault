@@ -9,6 +9,7 @@ module test_vault::EscrowTests {
     use test_vault::Escrow;
 
     struct TestCoin1{}
+    struct TestCoin2{}
     
     struct CoinCapabilities has key {
         mint_cap: Coin::MintCapability<TestCoin1>,
@@ -82,6 +83,70 @@ module test_vault::EscrowTests {
         Escrow::withdraw<TestCoin1>(&user, 10, addr);
         assert!(
           Escrow::get_user_info<TestCoin1>(user_addr) == 0,
+          1
+        );
+
+        // ================================
+
+        
+        let name = string::utf8(b"Fake money2");
+        let symbol = string::utf8(b"FMD2");
+
+        let (mint_cap, burn_cap) = Coin::initialize<TestCoin2>(
+            &coin_owner,
+            name,
+            symbol,
+            18,
+            true
+        );
+        Coin::register<TestCoin2>(&coin_owner);
+        let coins_minted = Coin::mint<TestCoin2>(100000, &mint_cap);
+        Coin::deposit(signer::address_of(&coin_owner), coins_minted);
+        move_to(&coin_owner, CoinCapabilities {
+            mint_cap,
+            burn_cap
+        });
+
+        if (!Escrow::is_initialized_valut<TestCoin2>(addr)) {
+            Escrow::init_escrow<TestCoin2>(&admin);
+        };
+
+        assert!(
+          Escrow::get_vault_status<TestCoin2>(addr) == false,
+          0
+        );
+        
+        Escrow::pause_escrow<TestCoin2>(&admin);
+        assert!(
+          Escrow::get_vault_status<TestCoin2>(addr) == true,
+          0
+        );
+        
+        Escrow::resume_escrow<TestCoin2>(&admin);
+        assert!(
+          Escrow::get_vault_status<TestCoin2>(addr) == false,
+          0
+        );
+        
+        let user = get_account();
+        let user_addr = signer::address_of(&user);
+
+        if (!Coin::is_account_registered<TestCoin2>(user_addr)) {
+            Coin::register<TestCoin2>(&user);
+        };
+
+
+        Coin::transfer<TestCoin2>(&coin_owner, user_addr, 10);
+
+        Escrow::deposit<TestCoin2>(&user, 10, addr);
+        assert!(
+          Escrow::get_user_info<TestCoin2>(user_addr) == 10,
+          1
+        );
+
+        Escrow::withdraw<TestCoin2>(&user, 10, addr);
+        assert!(
+          Escrow::get_user_info<TestCoin2>(user_addr) == 0,
           1
         );
     }
