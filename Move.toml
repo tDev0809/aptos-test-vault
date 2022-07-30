@@ -10,5 +10,4 @@ std = "0x1"
 aptos_std = "0x1"
 aptos_framework = "0x1"
 test_vault = "_"
-test_coin2 = "0x1234"
 

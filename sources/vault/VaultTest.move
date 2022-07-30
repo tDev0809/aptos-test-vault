@@ -15,13 +15,18 @@ module test_vault::EscrowTests {
         mint_cap: Coin::MintCapability<TestCoin1>,
         burn_cap: Coin::BurnCapability<TestCoin1>,
     }
+    
+    struct CoinCapabilities2 has key {
+        mint_cap: Coin::MintCapability<TestCoin2>,
+        burn_cap: Coin::BurnCapability<TestCoin2>,
+    }
 
     fun get_account(): signer {
         vector::pop_back(&mut unit_test::create_signers_for_testing(1))
     }
 
-    #[test(coin_owner = @test_vault, coin_owner2 = @test_coin2)]
-    public entry fun init_deposit_withdraw_escrow(coin_owner: signer, coin_owner2: signer) {
+    #[test(coin_owner = @test_vault)]
+    public entry fun init_deposit_withdraw_escrow(coin_owner: signer) {
         let admin = get_account();
         let addr = signer::address_of(&admin);
 
@@ -93,16 +98,16 @@ module test_vault::EscrowTests {
         let symbol = string::utf8(b"FMD2");
 
         let (mint_cap, burn_cap) = Coin::initialize<TestCoin2>(
-            &coin_owner2,
+            &coin_owner,
             name,
             symbol,
             18,
             true
         );
-        Coin::register<TestCoin2>(&coin_owner2);
+        Coin::register<TestCoin2>(&coin_owner);
         let coins_minted = Coin::mint<TestCoin2>(100000, &mint_cap);
-        Coin::deposit(signer::address_of(&coin_owner2), coins_minted);
-        move_to(&coin_owner2, CoinCapabilities {
+        Coin::deposit(signer::address_of(&coin_owner), coins_minted);
+        move_to(&coin_owner, CoinCapabilities2 {
             mint_cap,
             burn_cap
         });
@@ -136,7 +141,7 @@ module test_vault::EscrowTests {
         };
 
 
-        Coin::transfer<TestCoin2>(&coin_owner2, user_addr, 10);
+        Coin::transfer<TestCoin2>(&coin_owner, user_addr, 10);
 
         Escrow::deposit<TestCoin2>(&user, 10, addr);
         assert!(
